@@ -1,18 +1,26 @@
 package main
 
 import (
-	controllers "app/http/controllers"
+	"controllers"
 
 	"github.com/zenazn/goji"
 )
 
+const (
+	albumRoutePrefix = "/v1/albums"
+)
+
 func main() {
+	album := new(controllers.Album)
+	// GET /v1/albums
+	goji.Get(albumRoutePrefix, album.Index)
+	// GET /v1/albums/{{id}}
+	goji.Get(albumRoutePrefix+"/:id", album.Show)
+
 	misc := new(controllers.Misc)
-
-	// Add routes to the global handler
+	// FIXME: unused
 	goji.Get("/", misc.Root)
-
-	// Use a custom 404 handler
+	// 404 handler
 	goji.NotFound(misc.NotFound)
 
 	// Call Serve() at the bottom of your main() function, and it'll take

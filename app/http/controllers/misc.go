@@ -1,11 +1,9 @@
-package controller
+package controllers
 
 import (
 	"io"
 	"net/http"
 )
-
-func init() {}
 
 type Misc struct{}
 

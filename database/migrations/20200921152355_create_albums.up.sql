@@ -1,0 +1,1 @@
+CREATE TABLE restful.albums (id INT AUTO_INCREMENT, genre VARCHAR (20) NOT NULL, `name` VARCHAR(30) NOT NULL, PRIMARY KEY (id));

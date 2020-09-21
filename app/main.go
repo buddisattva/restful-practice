@@ -1,7 +1,7 @@
 package main
 
 import (
-	"controllers"
+	"controller"
 
 	"github.com/zenazn/goji"
 )
@@ -11,13 +11,13 @@ const (
 )
 
 func main() {
-	album := new(controllers.Album)
+	album := new(controller.Album)
 	// GET /v1/albums
 	goji.Get(albumRoutePrefix, album.Index)
 	// GET /v1/albums/{{id}}
 	goji.Get(albumRoutePrefix+"/:id", album.Show)
 
-	misc := new(controllers.Misc)
+	misc := new(controller.Misc)
 	// FIXME: unused
 	goji.Get("/", misc.Root)
 	// 404 handler

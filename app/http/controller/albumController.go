@@ -23,6 +23,8 @@ type AlbumController struct{}
 func (a AlbumController) Store(w http.ResponseWriter, r *http.Request) {
 	var album input.NewAlbum
 
+	// TODO: validate input format(maybe defined in another package)
+
 	err := json.NewDecoder(r.Body).Decode(&album)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
@@ -31,8 +33,7 @@ func (a AlbumController) Store(w http.ResponseWriter, r *http.Request) {
 
 	albumGateway.Store(album)
 
-	w.WriteHeader(http.StatusCreated)
-	io.WriteString(w, "{}")
+	RenderJSON(http.StatusCreated, w, []byte{})
 }
 
 // Index lists all albums
@@ -98,5 +99,6 @@ func (a AlbumController) Update(c web.C, w http.ResponseWriter, r *http.Request)
 		return
 	}
 
-	io.WriteString(w, "??????????????")
+	w.WriteHeader(http.StatusBadRequest)
+	io.WriteString(w, "{}")
 }

@@ -75,3 +75,28 @@ func (a AlbumController) Destroy(c web.C, w http.ResponseWriter, r *http.Request
 
 	io.WriteString(w, "{}")
 }
+
+// Update updates properties of an album
+func (a AlbumController) Update(c web.C, w http.ResponseWriter, r *http.Request) {
+	// TODO: validate input id. input id should be an unsigned int
+	id, err := strconv.Atoi(c.URLParams["id"])
+	if err != nil {
+		panic(err.Error())
+	}
+
+	var album input.NewAlbum
+
+	err = json.NewDecoder(r.Body).Decode(&album)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	res := albumGateway.UpdateById(id, album)
+	if res {
+		io.WriteString(w, "{}")
+		return
+	}
+
+	io.WriteString(w, "??????????????")
+}

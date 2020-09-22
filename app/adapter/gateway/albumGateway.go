@@ -32,3 +32,9 @@ func (g AlbumGateway) GetById(id int) dao.Album {
 func (g AlbumGateway) DeleteById(id int) bool {
 	return albumDao.DeleteById(id)
 }
+
+func (g AlbumGateway) UpdateById(id int, input input.NewAlbum) bool {
+	mapInput := structs.Map(input)
+
+	return albumDao.UpdateById(id, mapInput)
+}

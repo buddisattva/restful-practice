@@ -20,6 +20,8 @@ func main() {
 	goji.Get(albumRoutePrefix+"/:id", albumController.Show)
 	// DELETE /v1/albums/{{id}}
 	goji.Delete(albumRoutePrefix+"/:id", albumController.Destroy)
+	// PUT /v1/albums/{{id}}
+	goji.Put(albumRoutePrefix+"/:id", albumController.Update)
 
 	// add "Content-Type: application/json" into responded headers
 	goji.Use(ApplicationJSON)

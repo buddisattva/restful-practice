@@ -55,3 +55,28 @@ func (d AlbumDao) DeleteById(id int) bool {
 
 	return true
 }
+
+func (d AlbumDao) UpdateById(id int, input map[string]interface{}) bool {
+	row := dbCon.QueryRow("SELECT id FROM "+table+" WHERE id=?", id)
+	scan := row.Scan(&id)
+
+	switch {
+	case scan == sql.ErrNoRows:
+		// not found
+		return false
+	case scan != nil:
+		panic(scan.Error())
+	}
+
+	res, err := dbCon.Exec("UPDATE "+table+" SET genre=?,name=? WHERE id=?", input["Genre"], input["Name"], id)
+	if err != nil {
+		panic(err.Error())
+	}
+
+	_, err = res.RowsAffected()
+	if err != nil {
+		panic(err.Error())
+	}
+
+	return true
+}

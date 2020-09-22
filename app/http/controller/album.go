@@ -10,31 +10,51 @@ import (
 	"github.com/zenazn/goji/web"
 )
 
+var albumGateway *gateway.AlbumGateway
+
+func init() {
+	albumGateway = new(gateway.AlbumGateway)
+}
+
 type AlbumController struct{}
 
-// GET /v1/albums
+// Index lists all albums, GET /v1/albums
 func (a AlbumController) Index(w http.ResponseWriter, r *http.Request) {
-	albumGateway := new(gateway.AlbumGateway)
 	albums := albumGateway.ListAll()
 	json, err := json.Marshal(albums)
 	if err != nil {
-		err.Error()
+		panic(err.Error())
 	}
 
 	io.WriteString(w, string(json))
 }
 
-// GET /v1/albums/{{id}}
+// Show shows an album having input ID, GET /v1/albums/{{id}}
 func (a AlbumController) Show(c web.C, w http.ResponseWriter, r *http.Request) {
-	// TODO: validate input id. input id should be unsigned int
+	// TODO: validate input id. input id should be an unsigned int
 	id, err := strconv.Atoi(c.URLParams["id"])
+	if err != nil {
+		panic(err.Error())
+	}
 
-	albumGateway := new(gateway.AlbumGateway)
 	album := albumGateway.GetById(id)
 	json, err := json.Marshal(album)
 	if err != nil {
-		err.Error()
+		panic(err.Error())
 	}
 
 	io.WriteString(w, string(json))
+}
+
+// Destroy deletes an album idempotently
+func (a AlbumController) Destroy(c web.C, w http.ResponseWriter, r *http.Request) {
+	// TODO: validate input id. input id should be an unsigned int
+	id, err := strconv.Atoi(c.URLParams["id"])
+	if err != nil {
+		panic(err.Error())
+	}
+
+	albumGateway.DeleteById(id)
+
+	io.WriteString(w, "{}")
 }

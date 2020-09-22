@@ -16,6 +16,8 @@ func main() {
 	goji.Get(albumRoutePrefix, albumController.Index)
 	// GET /v1/albums/{{id}}
 	goji.Get(albumRoutePrefix+"/:id", albumController.Show)
+	// DELETE /v1/albums/{{id}}
+	goji.Delete(albumRoutePrefix+"/:id", albumController.Destroy)
 
 	misc := new(controller.Misc)
 	// 404 handler

@@ -18,7 +18,7 @@ func (d AlbumDao) ListAll() []Album {
 	albums := []Album{}
 	err := dbCon.Select(&albums, "SELECT id,genre,name FROM "+table)
 	if err != nil {
-		err.Error()
+		panic(err.Error())
 	}
 
 	return albums
@@ -30,8 +30,17 @@ func (d AlbumDao) GetById(id int) Album {
 	switch {
 	case err == sql.ErrNoRows:
 	case err != nil:
-		err.Error()
+		panic(err.Error())
 	}
 
 	return album
+}
+
+func (d AlbumDao) DeleteById(id int) bool {
+	_, err := dbCon.Query("DELETE FROM "+table+" WHERE id=?", id)
+	if err != nil {
+		panic(err.Error())
+	}
+
+	return true
 }

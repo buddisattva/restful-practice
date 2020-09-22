@@ -19,6 +19,8 @@ func main() {
 	// DELETE /v1/albums/{{id}}
 	goji.Delete(albumRoutePrefix+"/:id", albumController.Destroy)
 
+	goji.Use(ApplicationJSON)
+
 	misc := new(controller.Misc)
 	// 404 handler
 	goji.NotFound(misc.NotFound)

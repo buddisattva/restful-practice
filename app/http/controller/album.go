@@ -3,6 +3,7 @@ package controller
 import (
 	"encoding/json"
 	"gateway"
+	"input"
 	"io"
 	"net/http"
 	"strconv"
@@ -18,7 +19,23 @@ func init() {
 
 type AlbumController struct{}
 
-// Index lists all albums, GET /v1/albums
+// Store creates a new album
+func (a AlbumController) Store(w http.ResponseWriter, r *http.Request) {
+	var album input.NewAlbum
+
+	err := json.NewDecoder(r.Body).Decode(&album)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	albumGateway.Store(album)
+
+	w.WriteHeader(http.StatusCreated)
+	io.WriteString(w, "{}")
+}
+
+// Index lists all albums
 func (a AlbumController) Index(w http.ResponseWriter, r *http.Request) {
 	albums := albumGateway.ListAll()
 	json, err := json.Marshal(albums)
@@ -29,7 +46,7 @@ func (a AlbumController) Index(w http.ResponseWriter, r *http.Request) {
 	io.WriteString(w, string(json))
 }
 
-// Show shows an album having input ID, GET /v1/albums/{{id}}
+// Show shows an album having input ID
 func (a AlbumController) Show(c web.C, w http.ResponseWriter, r *http.Request) {
 	// TODO: validate input id. input id should be an unsigned int
 	id, err := strconv.Atoi(c.URLParams["id"])

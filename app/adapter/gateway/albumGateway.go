@@ -1,6 +1,11 @@
 package gateway
 
-import "dao"
+import (
+	"dao"
+	"input"
+
+	"github.com/fatih/structs"
+)
 
 var albumDao *dao.AlbumDao
 
@@ -9,6 +14,12 @@ func init() {
 }
 
 type AlbumGateway struct{}
+
+func (g AlbumGateway) Store(input input.NewAlbum) bool {
+	mapInput := structs.Map(input)
+
+	return albumDao.Store(mapInput)
+}
 
 func (g AlbumGateway) ListAll() []dao.Album {
 	return albumDao.ListAll()

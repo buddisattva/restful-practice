@@ -12,6 +12,8 @@ const (
 
 func main() {
 	albumController := new(controller.AlbumController)
+	// POST /v1/albums
+	goji.Post(albumRoutePrefix, albumController.Store)
 	// GET /v1/albums
 	goji.Get(albumRoutePrefix, albumController.Index)
 	// GET /v1/albums/{{id}}
@@ -19,6 +21,7 @@ func main() {
 	// DELETE /v1/albums/{{id}}
 	goji.Delete(albumRoutePrefix+"/:id", albumController.Destroy)
 
+	// add "Content-Type: application/json" into responded headers
 	goji.Use(ApplicationJSON)
 
 	misc := new(controller.Misc)

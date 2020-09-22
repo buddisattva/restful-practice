@@ -1,6 +1,8 @@
 package dao
 
-import "database/sql"
+import (
+	"database/sql"
+)
 
 const (
 	table = "albums"
@@ -13,6 +15,15 @@ type Album struct {
 }
 
 type AlbumDao struct{}
+
+func (d AlbumDao) Store(input map[string]interface{}) bool {
+	_, err := dbCon.Query("INSERT INTO "+table+" (genre,name) VALUES (?,?)", input["Genre"], input["Name"])
+	if err != nil {
+		panic(err.Error())
+	}
+
+	return true
+}
 
 func (d AlbumDao) ListAll() []Album {
 	albums := []Album{}

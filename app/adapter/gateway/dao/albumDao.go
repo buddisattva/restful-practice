@@ -1,16 +1,23 @@
 package dao
 
-import "database/sql"
+const (
+	table = "albums"
+)
 
-type albumDao struct{}
+type Album struct {
+	Id    int    `db:"id"`
+	Genre string `db:"genre"`
+	Name  string `db:"name"`
+}
 
-func init() {
-	db, err := sql.Open("mysql", "user:password@/database")
+type AlbumDao struct{}
+
+func (d AlbumDao) ListAll() []Album {
+	albums := []Album{}
+	err := dbCon.Select(&albums, "SELECT id,genre,name FROM "+table)
 	if err != nil {
 		panic(err.Error())
 	}
-}
 
-func (g albumGateway) ListAll() string {
-	return "sw"
+	return albums
 }

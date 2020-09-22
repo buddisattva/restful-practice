@@ -1,13 +1,11 @@
 package gateway
 
-import dao
+import "dao"
 
-type albumGateway struct{}
+type AlbumGateway struct{}
 
-func init() {
-	dao = dao.albumDao
-}
+func (g AlbumGateway) ListAll() []dao.Album {
+	albumDao := new(dao.AlbumDao)
 
-func (g albumGateway) ListAll() string {
 	return albumDao.ListAll()
 }

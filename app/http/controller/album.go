@@ -1,21 +1,30 @@
 package controller
 
 import (
+	"encoding/json"
+	"gateway"
 	"io"
 	"net/http"
 
 	"github.com/zenazn/goji/web"
 )
 
-type Album struct{}
+type AlbumController struct{}
 
 // GET /v1/albums
-func (a Album) Index(w http.ResponseWriter, r *http.Request) {
-	io.WriteString(w, "787878787878")
+func (a AlbumController) Index(w http.ResponseWriter, r *http.Request) {
+	albumGateway := new(gateway.AlbumGateway)
+	albums := albumGateway.ListAll()
+	json, err := json.Marshal(albums)
+	if err != nil {
+		err.Error()
+	}
+
+	io.WriteString(w, string(json))
 }
 
 // GET /v1/albums/{{id}}
-func (a Album) Show(c web.C, w http.ResponseWriter, r *http.Request) {
+func (a AlbumController) Show(c web.C, w http.ResponseWriter, r *http.Request) {
 	io.WriteString(w, "Gritter\n======\n\n")
 	handle := c.URLParams["id"]
 	// user, ok := Users[handle]

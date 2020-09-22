@@ -11,11 +11,11 @@ const (
 )
 
 func main() {
-	album := new(controller.Album)
+	albumController := new(controller.AlbumController)
 	// GET /v1/albums
-	goji.Get(albumRoutePrefix, album.Index)
+	goji.Get(albumRoutePrefix, albumController.Index)
 	// GET /v1/albums/{{id}}
-	goji.Get(albumRoutePrefix+"/:id", album.Show)
+	goji.Get(albumRoutePrefix+"/:id", albumController.Show)
 
 	misc := new(controller.Misc)
 	// FIXME: unused

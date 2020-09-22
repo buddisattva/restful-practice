@@ -9,3 +9,9 @@ func (g AlbumGateway) ListAll() []dao.Album {
 
 	return albumDao.ListAll()
 }
+
+func (g AlbumGateway) GetById(id int) dao.Album {
+	albumDao := new(dao.AlbumDao)
+
+	return albumDao.GetById(id)
+}

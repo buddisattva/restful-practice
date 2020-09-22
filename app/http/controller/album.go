@@ -5,6 +5,7 @@ import (
 	"gateway"
 	"io"
 	"net/http"
+	"strconv"
 
 	"github.com/zenazn/goji/web"
 )
@@ -25,20 +26,15 @@ func (a AlbumController) Index(w http.ResponseWriter, r *http.Request) {
 
 // GET /v1/albums/{{id}}
 func (a AlbumController) Show(c web.C, w http.ResponseWriter, r *http.Request) {
-	io.WriteString(w, "Gritter\n======\n\n")
-	handle := c.URLParams["id"]
-	// user, ok := Users[handle]
-	// if !ok {
-	// 	http.Error(w, http.StatusText(404), 404)
-	// 	return
-	// }
+	// TODO: validate input id. input id should be unsigned int
+	id, err := strconv.Atoi(c.URLParams["id"])
 
-	// user.Write(w, handle)
+	albumGateway := new(gateway.AlbumGateway)
+	album := albumGateway.GetById(id)
+	json, err := json.Marshal(album)
+	if err != nil {
+		err.Error()
+	}
 
-	io.WriteString(w, "albumId:"+handle)
-	// for i := len(Greets) - 1; i >= 0; i-- {
-	// 	if Greets[i].User == handle {
-	// 		Greets[i].Write(w)
-	// 	}
-	// }
+	io.WriteString(w, string(json))
 }

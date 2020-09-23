@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"gateway"
 	"input"
-	"io"
 	"net/http"
 	"strconv"
 
@@ -33,18 +32,15 @@ func (a AlbumController) Store(w http.ResponseWriter, r *http.Request) {
 
 	albumGateway.Store(album)
 
-	RenderJSON(http.StatusCreated, w, []byte{})
+	RenderJSON("200001", w, "{}")
 }
 
 // Index lists all albums
 func (a AlbumController) Index(w http.ResponseWriter, r *http.Request) {
 	albums := albumGateway.ListAll()
-	json, err := json.Marshal(albums)
-	if err != nil {
-		panic(err.Error())
-	}
+	json, _ := json.Marshal(albums)
 
-	io.WriteString(w, string(json))
+	RenderJSON("200001", w, string(json))
 }
 
 // Show shows an album having input ID
@@ -61,7 +57,7 @@ func (a AlbumController) Show(c web.C, w http.ResponseWriter, r *http.Request) {
 		panic(err.Error())
 	}
 
-	io.WriteString(w, string(json))
+	RenderJSON("200001", w, string(json))
 }
 
 // Destroy deletes an album idempotently
@@ -74,7 +70,7 @@ func (a AlbumController) Destroy(c web.C, w http.ResponseWriter, r *http.Request
 
 	albumGateway.DeleteById(id)
 
-	io.WriteString(w, "{}")
+	RenderJSON("200001", w, "{}")
 }
 
 // Update updates properties of an album
@@ -95,10 +91,9 @@ func (a AlbumController) Update(c web.C, w http.ResponseWriter, r *http.Request)
 
 	res := albumGateway.UpdateById(id, album)
 	if res {
-		io.WriteString(w, "{}")
+		RenderJSON("200001", w, "{}")
 		return
 	}
 
-	w.WriteHeader(http.StatusBadRequest)
-	io.WriteString(w, "{}")
+	RenderErrorJSON("400001", w, "The album does not exist.")
 }

@@ -2,10 +2,14 @@
 
 ## Deployment
 ```shell=
-# docker run --name restful-mysql -e MYSQL_ROOT_PASSWORD=5566 -p 3306:3306 -d mysql:8
-# cd /path/to/this-project
-# cd app
-# go run *.go
+$ docker run --name restful-mysql -e MYSQL_ROOT_PASSWORD=5566 -p 3306:3306 -d mysql:8
+
+# 在 MySQL instance 中建立名為 restful 的 database
+# 在 restful 中執行 database\migrations\20200921152355_create_albums.up.sql 內容
+
+$ cd /path/to/this-project
+$ cd app
+$ go run *.go
 ```
 
 ## API
